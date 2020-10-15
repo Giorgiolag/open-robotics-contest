@@ -1,0 +1,20 @@
+        
+def get_sum_of_tc():
+        client = MongoClient()
+        db = client.messages
+        date1 = datetime.datetime.utcnow()-timedelta(days=5)
+        date1 = date1.replace(hour = 0,minute = 0, second = 0, microsecond = 0)
+        documents = db.ReceivedData.find({'time': {'$gte' : date1}},{'data': 1, '_id': 0})
+        docarray = []
+        sum_of_TC = 0.0
+        for doc in documents:
+                docarray.append(doc['data'])
+        for i in docarray:
+                result = i.find('TC')
+                if i[result+5]!='"':
+                        new_string = i[result+5:len(i)-1]
+                        float_TC = float(new_string)
+                        sum_of_TC +=float_TC
+        client.close()
+	# p??s??ste ed? t?? ??d??a ??a t?? ap?st??? t?? sms. ???s??? ??at? ? ??d??a? a?t?? de? ?a t???e?
+	# a? t?? e?et?sete sa? ??a a??e?? pyhton. ? ??d??a? a?t?? ?a p??pe? ?a p??ste?e? st? t???? t?? a??e??? 	# MongoDB.py. 
